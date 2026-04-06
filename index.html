@@ -559,6 +559,14 @@
 /* ensure pseudo-element positions relative to button */
 .pay-primary{position:relative;overflow:visible}
 
+/* Ensure Pay button content can shrink and not force horizontal scroll */
+.pay-primary, .pay-primary > .pay-left, .pay-primary > .pay-right { min-width:0; }
+.pay-primary .pay-left, .pay-primary .pay-right { display:flex; align-items:center; gap:8px; }
+.pay-primary .pay-label{display:inline-block; max-width:calc(100vw - 220px); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+
+/* On sticky mobile bar hide right price to save space */
+.sticky-mobile .pay-right{display:none}
+
 /* Offer card premium animation */
 .offer-card{position:relative;overflow:hidden;border-radius:20px;transition:transform 420ms cubic-bezier(.2,.9,.2,1), box-shadow 420ms ease;}
 .offer-card:hover,.offer-card.in-view{transform:translateY(-8px) scale(1.01);box-shadow:0 30px 80px rgba(221,36,118,0.14);}
@@ -811,7 +819,22 @@ slider.addEventListener('mouseup', startAutoScroll);
 
 <!-- UPLOAD -->
 <div class="card" style="margin-top:14px;">
-  <a class="btn btn-secondary" href="https://wa.me/919330395465">📤 Upload Screenshot</a>
+  <button class="btn btn-secondary upload-btn" type="button">📤 Upload Screenshot</button>
+  <input id="screenshotInput" type="file" accept="image/*" capture="environment" style="display:none">
+
+  <div id="uploadPreview" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:1400; align-items:center; justify-content:center;">
+    <div style="background:#fff; padding:12px; border-radius:12px; max-width:92%; max-height:86%; overflow:auto; text-align:center;">
+      <h3 style="margin:6px 0 8px;">Preview Screenshot</h3>
+      <img id="previewImg" src="" style="max-width:100%; max-height:60vh; display:block; margin:0 auto 8px; border-radius:8px;" />
+      <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+        <button id="shareBtn" class="btn btn-primary" style="width:auto; padding:10px 14px;">Share</button>
+        <a id="openBtn" class="btn btn-secondary" style="width:auto; padding:10px 14px;">Open</a>
+        <a id="downloadBtn" class="btn btn-secondary" style="width:auto; padding:10px 14px;">Download</a>
+        <button id="closePreview" class="btn" style="width:auto; padding:10px 14px;">Close</button>
+      </div>
+      <div style="font-size:0.85rem; color:#666; margin-top:8px;">If your browser supports sharing, use Share for WhatsApp or other apps.</div>
+    </div>
+  </div>
 </div>
 
 <!-- QR -->
@@ -982,6 +1005,67 @@ document.addEventListener('DOMContentLoaded', ()=>{
   document.querySelectorAll('.btn').forEach(b=>{
     b.addEventListener('pointerdown', makeRipple);
   });
+});
+</script>
+
+<script>
+// Upload screenshot flow: preview + share/download fallbacks
+document.addEventListener('DOMContentLoaded', ()=>{
+  const uploadBtn = document.querySelector('.upload-btn');
+  const fileInput = document.getElementById('screenshotInput');
+  const previewWrap = document.getElementById('uploadPreview');
+  const previewImg = document.getElementById('previewImg');
+  const shareBtn = document.getElementById('shareBtn');
+  const openBtn = document.getElementById('openBtn');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const closeBtn = document.getElementById('closePreview');
+
+  if(!uploadBtn || !fileInput) return;
+
+  uploadBtn.addEventListener('click', ()=> fileInput.click());
+
+  let currentFile = null;
+  let currentUrl = null;
+
+  fileInput.addEventListener('change', async (ev)=>{
+    const f = ev.target.files && ev.target.files[0];
+    if(!f) return;
+    currentFile = f;
+    if(currentUrl) URL.revokeObjectURL(currentUrl);
+    currentUrl = URL.createObjectURL(f);
+    previewImg.src = currentUrl;
+    previewWrap.style.display = 'flex';
+    // prepare Open and Download
+    openBtn.href = currentUrl; openBtn.setAttribute('target','_blank');
+    downloadBtn.href = currentUrl; downloadBtn.setAttribute('download', f.name || 'screenshot.png');
+
+    // Share button behavior
+    if(navigator.canShare && navigator.canShare({files:[f]})){
+      shareBtn.style.display = 'inline-flex';
+      shareBtn.onclick = async ()=>{
+        try{ await navigator.share({files:[f], title:'Screenshot', text:'Sharing screenshot'}); }
+        catch(err){ alert('Share failed or cancelled'); }
+      };
+    } else if(navigator.share){
+      // some browsers allow share without files
+      shareBtn.style.display = 'inline-flex';
+      shareBtn.onclick = async ()=>{
+        try{ await navigator.share({title:'Screenshot', text:'Screenshot from page', url:currentUrl}); }
+        catch(err){ alert('Share failed or cancelled'); }
+      };
+    } else {
+      shareBtn.style.display = 'none';
+    }
+  });
+
+  closeBtn.addEventListener('click', ()=>{
+    previewWrap.style.display = 'none';
+    if(currentUrl){ URL.revokeObjectURL(currentUrl); currentUrl = null; }
+    fileInput.value = '';
+  });
+
+  // allow clicking overlay to close
+  previewWrap.addEventListener('click', (e)=>{ if(e.target === previewWrap) closeBtn.click(); });
 });
 </script>
 
