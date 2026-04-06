@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skills To Earn - Payment Page</title>
+  <style>
+    :root {
+      --bg: #f4f8ff;
+      --card: #ffffff;
+      --primary: #1e63ff;
+      --primary-dark: #1247c7;
+      --text: #1b2430;
+      --muted: #667085;
+      --border: #e6ecf7;
+      --success: #16a34a;
+      --warn: #ff8a00;
+      --shadow: 0 10px 30px rgba(30, 99, 255, 0.10);
+      --radius: 22px;
+    }
+      position: relative;
+      overflow: hidden;
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #eef5ff 0%, #f8fbff 45%, #ffffff 100%);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    .container {
+      width: min(1100px, calc(100% - 24px));
+      margin: 0 auto;
+      padding: 20px 0 40px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #ffffff 0%, #f3f7ff 100%);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--primary), #6aa4ff);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      box-shadow: 0 8px 18px rgba(30, 99, 255, 0.25);
+    }
+
+    .brand h1 {
+      font-size: 1.05rem;
+      margin: 0;
+    }
+
+    .brand p {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: #eff5ff;
+      color: var(--primary-dark);
+      font-weight: 700;
+      font-size: 0.9rem;
+      border: 1px solid #d9e5ff;
+      white-space: nowrap;
+    }
+
+    .badge.warn {
+      background: #fff6ea;
+      color: #a85f00;
+      border-color: #ffe1b8;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 18px;
+      align-items: stretch;
+      margin-top: 8px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    .title {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 1.05;
+      margin: 0 0 12px;
+      letter-spacing: -0.03em;
+    }
+
+    .tagline {
+      font-size: 1.05rem;
+      color: var(--muted);
+      margin: 0 0 18px;
+      max-width: 58ch;
+    }
+
+    .highlight-box {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 18px 0 0;
+    }
+
+    .mini-stat {
+      background: #f7faff;
+      border: 1px solid #e4ecff;
+      border-radius: 18px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .mini-stat strong {
+      display: block;
+      font-size: 1.2rem;
+      color: var(--primary-dark);
+      margin-bottom: 3px;
+    }
+
+    .mini-stat span {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .info-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .info-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 14px;
+      border-radius: 18px;
+      background: #fbfdff;
+      border: 1px solid var(--border);
+    }
+
+    .info-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #eaf1ff;
+      color: var(--primary-dark);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      flex: 0 0 auto;
+    }
+
+    .info-item h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .info-item p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .pricing {
+      display: grid;
+      gap: 14px;
+    }
+
+    .price-card {
+      background: linear-gradient(180deg, #ffffff 0%, #f7faff 100%);
+      border: 1px solid #dce8ff;
+      border-radius: 24px;
+      padding: 22px;
+    }
+
+    .price-label {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .old-price {
+      font-size: 1.2rem;
+      color: #8b97ab;
+      text-decoration: line-through;
+      font-weight: 700;
+    }
+
+    .new-price {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      color: var(--primary-dark);
+      letter-spacing: -0.03em;
+    }
+
+    .savings {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #eafaf0;
+      color: var(--success);
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .coupon-box {
+      border: 1px dashed #9ab8ff;
+      background: #f5f8ff;
+      padding: 14px;
+      border-radius: 18px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      text-align: center;
+    }
+
+    .cta-row {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      border-radius: 16px;
+      padding: 15px 18px;
+      font-size: 1rem;
+      font-weight: 800;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #4f8cff);
+      color: #fff;
+      box-shadow: 0 10px 22px rgba(30, 99, 255, 0.22);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--primary-dark);
+      border: 1px solid #c9d9ff;
+    }
+
+    .section {
+      margin-top: 18px;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .section h2 {
+      margin: 0 0 14px;
+      font-size: 1.4rem;
+      letter-spacing: -0.02em;
+    }
+
+    .subtext {
+      color: var(--muted);
+      margin: -4px 0 14px;
+    }
+
+    .payment-box {
+      display: grid;
+      gap: 14px;
+      place-items: center;
+      text-align: center;
+    }
+
+    .qr-placeholder {
+      width: min(100%, 310px);
+      aspect-ratio: 1 / 1;
+      border-radius: 24px;
+      border: 2px dashed #9fb9ff;
+      background: linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
+      display: grid;
+      place-items: center;
+      padding: 18px;
+    }
+
+    .qr-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 20px;
+      background: #ffffff;
+      border: 1px solid #dbe6ff;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      color: #6b7ca3;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .qr-inner small {
+      display: block;
+      font-weight: 400;
+      color: var(--muted);
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    .steps {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .step {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: #fcfeff;
+    }
+
+    .step-num {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      flex: 0 0 auto;
+    }
+
+    .step strong { display: block; margin-bottom: 2px; }
+    .step span { color: var(--muted); font-size: 0.95rem; }
+
+    .learn-grid, .benefit-grid, .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .pill-card {
+      padding: 16px;
+      border-radius: 18px;
+      background: #fbfdff;
+      border: 1px solid var(--border);
+    }
+
+    .pill-card h3 {
+      margin: 0 0 6px;
+      font-size: 1rem;
+    }
+
+    .pill-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    details {
+      background: #fbfdff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px 16px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    details p {
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+
+    .footer {
+      margin-top: 18px;
+      padding: 18px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .footer strong { color: var(--text); }
+
+    .
+
+    @media (max-width: 900px) {
+      .hero-grid, .section-grid { grid-template-columns: 1fr; }
+      .learn-grid, .benefit-grid, .faq-grid { grid-template-columns: 1fr; }
+      .highlight-box { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 720px) {
+      .container { width: 100%; padding: 10px; }
+      .hero, .card { border-radius: 16px; }
+      .hero { padding: 14px; }
+      .card { padding: 14px; }
+
+      .title { font-size: 1.8rem; text-align:center; }
+      .tagline { text-align:center; font-size:0.95rem; }
+
+      .topbar { flex-direction: column; align-items: flex-start; gap:8px; }
+      .badge-row { justify-content: flex-start; }
+
+      .btn {
+        font-size: 1.05rem;
+        padding: 16px;
+        border-radius: 14px;
+      }
+
+      .price-card {
+        text-align:center;
+        padding:18px;
+      }
+
+      .new-price { font-size: 2.2rem; }
+
+      .qr-placeholder {
+        max-width: 260px;
+      }
+
+      .steps { gap:10px; }
+
+      .
+
+      .
+    }
+      .hero, .card { border-radius: 20px; }
+      .hero { padding: 16px; }
+      .card { padding: 16px; }
+      .title { font-size: 2rem; }
+      .badge-row { gap: 8px; }
+      .badge { font-size: 0.82rem; padding: 8px 11px; }
+
+      .
+
+      .
+    }
+  .tbox{background:#fff;border-radius:12px;padding:10px 12px;min-width:60px;box-shadow:0 6px 15px rgba(0,0,0,0.08);} .tbox span{font-size:1.3rem;display:block;color:#ff3b3b;} .tbox small{font-size:0.7rem;color:#666;} 
+@keyframes pop{0%{transform:scale(0.9);opacity:0;}100%{transform:scale(1);opacity:1;}}
+.btn-primary:hover{transform:scale(1.05);}
+@keyframes autoScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+#slider::-webkit-scrollbar{display:none;}
+/* Premium animated background */
+.premium-bg {
+  background: linear-gradient(120deg, rgba(30,99,255,0.06), rgba(77,138,255,0.03));
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before{
+  content: "";
+  position: absolute;
+  left: -10%;
+  top: -30%;
+  width: 140%;
+  height: 160%;
+  background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.28), transparent 15%), radial-gradient(circle at 80% 80%, rgba(255,255,255,0.18), transparent 10%);
+  transform: rotate(8deg) translateZ(0);
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  opacity: 0.9;
+}
+
+/* Card reveal */
+.card{transform: translateY(18px) scale(.995); opacity:0; transition: transform 700ms cubic-bezier(.2,.9,.2,1), opacity 650ms ease, box-shadow 450ms ease; will-change: transform, opacity;}
+.card.in-view{transform: translateY(0) scale(1); opacity:1;}
+
+/* Premium button glow */
+.btn-primary{transition: transform 220ms cubic-bezier(.2,.9,.2,1), box-shadow 420ms ease;}
+.btn-primary.glow{box-shadow: 0 18px 50px rgba(30,99,255,0.18), 0 6px 18px rgba(79,140,255,0.12); transform: translateY(-2px);}
+@keyframes btnPulse{0%{box-shadow:0 8px 30px rgba(30,99,255,0.08);}50%{box-shadow:0 20px 60px rgba(30,99,255,0.14);}100%{box-shadow:0 8px 30px rgba(30,99,255,0.08);}}
+.btn-primary.pulse{animation: btnPulse 2800ms infinite ease-in-out;}
+
+/* Professional Pay button styling */
+.pay-primary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-radius:18px;font-size:1.05rem;font-weight:900;background:linear-gradient(90deg,#1559ff,#4f8cff);color:#fff;box-shadow:0 12px 36px rgba(21,89,255,0.18);}
+.pay-primary .pay-left{display:inline-flex;align-items:center;gap:10px}
+.pay-primary .pay-icon{width:42px;height:42px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.03));display:inline-grid;place-items:center;font-size:18px;box-shadow:inset 0 -3px 6px rgba(0,0,0,0.06)}
+.pay-primary .pay-label{font-size:1.08rem}
+.pay-primary .pay-right{display:flex;flex-direction:column;align-items:flex-end;font-weight:800}
+.pay-primary .pay-price{font-size:1.05rem}
+.pay-primary .pay-sec{font-size:0.72rem;opacity:0.9;font-weight:700;margin-top:2px}
+
+/* Sheen animation */
+.pay-primary::after{content:'';position:absolute;left:-60%;top:0;bottom:0;width:60%;transform:skewX(-18deg);background:linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.18), rgba(255,255,255,0.06));pointer-events:none;opacity:0.0}
+.pay-primary:hover::after{animation: sheen 1000ms linear; opacity:1}
+@keyframes sheen{0%{left:-60%}50%{left:120%}100%{left:120%}}
+
+/* Slightly larger touch area for sticky */
+.sticky-mobile .pay-primary{padding:12px 14px;border-radius:14px;font-size:0.98rem}
+
+/* ensure pseudo-element positions relative to button */
+.pay-primary{position:relative;overflow:visible}
+
+/* Offer card premium animation */
+.offer-card{position:relative;overflow:hidden;border-radius:20px;transition:transform 420ms cubic-bezier(.2,.9,.2,1), box-shadow 420ms ease;}
+.offer-card:hover,.offer-card.in-view{transform:translateY(-8px) scale(1.01);box-shadow:0 30px 80px rgba(221,36,118,0.14);}
+.offer-card::before{content:'';position:absolute;left:-20%;top:-40%;width:160%;height:160%;background:radial-gradient(circle at 20% 20%, rgba(255,255,255,0.18), transparent 12%), radial-gradient(circle at 80% 80%, rgba(255,255,255,0.12), transparent 8%);mix-blend-mode:overlay;opacity:0.9;transform:rotate(6deg);pointer-events:none}
+.offer-card .badge-float{position:absolute;right:-40px;top:8px;background:#000;padding:6px 48px;transform:rotate(45deg);font-size:12px;font-weight:800;color:#fff;box-shadow:0 6px 18px rgba(0,0,0,0.28)}
+.offer-card .savings-pill{display:inline-block;background:rgba(255,255,255,0.12);padding:6px 12px;border-radius:999px;font-weight:800}
+
+/* gentle shimmer moving across the card */
+.offer-card .shimmer{position:absolute;left:-50%;top:0;width:40%;height:100%;background:linear-gradient(90deg, rgba(255,255,255,0.0), rgba(255,255,255,0.12), rgba(255,255,255,0.0));transform:skewX(-20deg);pointer-events:none;opacity:0.0}
+.offer-card:hover .shimmer{animation:slideShine 900ms linear forwards;opacity:1}
+@keyframes slideShine{0%{left:-50%}50%{left:80%}100%{left:120%}}
+
+/* Make pay button smaller on very small screens so sticky fits */
+@media (max-width:420px){
+  .pay-primary{padding:10px 12px;font-size:0.96rem;border-radius:14px}
+  .pay-primary .pay-icon{width:36px;height:36px;font-size:16px}
+  .sticky-mobile{left:8px;right:8px;bottom:10px}
+  .sticky-mobile .pay-primary{flex:1;min-width:0}
+}
+
+/* Soft floating icons */
+.floating {position:absolute; pointer-events:none; opacity:0.14; filter: blur(6px);}
+    
+/* Ripple touch effect */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  background: rgba(255,255,255,0.45);
+  animation: ripple 700ms ease-out;
+  pointer-events: none;
+}
+@keyframes ripple{to{transform:scale(6);opacity:0;}}
+
+/* Ensure phone numbers and QR images stay straight and don't wrap */
+.footer {white-space: normal;}
+.footer img, .card img{transform:none!important;}
+
+/* Prevent images from causing horizontal overflow */
+img{max-width:100%;height:auto;display:block;}
+
+/* Mobile sticky actions: fixed bottom, responsive buttons */
+.sticky-mobile{
+  position:fixed;
+  left:12px;
+  right:12px;
+  bottom:12px;
+  display:flex;
+  gap:10px;
+  z-index:1200;
+  align-items:center;
+}
+.sticky-mobile .btn{flex:1; width:auto;}
+@media(min-width:720px){ .sticky-mobile{display:none;} }
+
+/* Tap-to-zoom for sections (mobile-friendly) */
+.section{transition: transform 240ms cubic-bezier(.2,.9,.2,1), box-shadow 240ms ease; will-change: transform, box-shadow;}
+.section.tapped{transform: scale(1.035); box-shadow: 0 30px 70px rgba(16,45,120,0.12); z-index:60;}
+@media (prefers-reduced-motion: reduce){ .section{transition:none;} }
+
+/* Small screens adjustments */
+@media (max-width:720px){ .hero::before{display:none;} }
+
+</style>
+</head>
+<body style="opacity:0; transition:opacity 0.8s ease;">
+<script>
+window.addEventListener('load',()=>{document.body.style.opacity='1';});
+</script>
+<script>
+function startCountdown(){
+  const endDate=new Date("2026-04-08T00:00:00").getTime();
+  function update(){
+    const now=new Date().getTime();
+    const diff=endDate-now;
+    if(diff<=0){document.getElementById("countdown").innerHTML="⛔ Offer Ended";return;}
+    const d=Math.floor(diff/(1000*60*60*24));
+    const h=Math.floor((diff/(1000*60*60))%24);
+    const m=Math.floor((diff/(1000*60))%60);
+    const s=Math.floor((diff/1000)%60);
+    document.getElementById("d").innerText=d;
+    document.getElementById("h").innerText=h;
+    document.getElementById("m").innerText=m;
+    document.getElementById("s").innerText=s;
+  }
+  update();setInterval(update,1000);
+}
+document.addEventListener("DOMContentLoaded",startCountdown);
+</script>
+<script>
+// Mobile detection for better UX
+function isMobile() {
+  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
+
+window.onload = function() {
+  if(isMobile()) {
+    document.body.classList.add("mobile-user");
+  }
+};
+</script>
+  <main class="container">
+    <section class="hero" style="text-align:center;">
+
+<!-- HEADER -->
+<div class="card" style="background:linear-gradient(135deg,#1e63ff,#4f8cff); color:white;">
+  <img src="https://i.ibb.co/20TGhKsS/wb-logo.png" style="width:65px;border-radius:16px;margin-bottom:8px;" />
+  <h2 style="margin:0;">WB Students Group</h2>
+  <p style="margin:5px 0 0; opacity:0.9;">Learn & Earn Skills</p>
+</div>
+
+<!-- TIMER -->
+<div class="card" style="margin-top:14px; background:#fff5f5; border:1px solid #ffdada;">
+  <h3 style="margin:0 0 8px; color:#ff3b3b;">⏳ Offer Ending Soon</h3>
+  <div id="countdown" style="display:flex;justify-content:center;gap:10px;font-weight:900;">
+    <div class="tbox"><span id="d">00</span><small>Days</small></div>
+    <div class="tbox"><span id="h">00</span><small>Hrs</small></div>
+    <div class="tbox"><span id="m">00</span><small>Min</small></div>
+    <div class="tbox"><span id="s">00</span><small>Sec</small></div>
+  </div>
+</div>
+
+
+
+<script>
+const slider = document.getElementById('slider');
+let autoScrollInterval;
+
+function startAutoScroll() {
+  autoScrollInterval = setInterval(() => {
+    slider.scrollLeft += 1;
+    if (slider.scrollLeft >= slider.scrollWidth - slider.clientWidth) {
+      slider.scrollLeft = 0;
+    }
+  }, 20);
+}
+
+function stopAutoScroll() {
+  clearInterval(autoScrollInterval);
+}
+
+startAutoScroll();
+
+slider.addEventListener('touchstart', stopAutoScroll);
+slider.addEventListener('mousedown', stopAutoScroll);
+slider.addEventListener('touchend', startAutoScroll);
+slider.addEventListener('mouseup', startAutoScroll);
+</script>
+
+<style>
+.slide-item{
+  min-width:100%;
+}
+
+.slide-item img{
+  width:100%;
+  height:auto;
+  display:block;
+  object-fit:contain;
+}
+</style>
+
+<!-- COURSE -->
+<div class="card" style="margin-top:14px;">
+  <h2 class="title">Skills To Earn</h2>
+  <p style="color:#555;">40 Days Course • 3 Classes/Week<br>Personal Support Group Included</p>
+</div>
+
+
+    <section class="section card">
+      <h2>What You Will Learn</h2>
+      <div class="learn-grid">
+        <div class="pill-card">
+          <h3>AI Animation</h3>
+          <p>Learn the basics of creating engaging AI-powered animated content.</p>
+        </div>
+        <div class="pill-card">
+          <h3>Video Editing</h3>
+          <p>Edit videos professionally for social media, classes, and content creation.</p>
+        </div>
+        <div class="pill-card">
+          <h3>Thumbnail Design</h3>
+          <p>Create attractive thumbnails that improve clicks and engagement.</p>
+        </div>
+        <div class="pill-card">
+          <h3>Using AI </h3>
+          <p>Understand AI to use in daily activities.</p>
+        </div>
+      </div>
+    </section>
+     <section class="section card">
+      <h2>What You Will Get</h2>
+      <div class="benefit-grid">
+        <div class="pill-card">
+          <h3>Live Guidance</h3>
+          <p>Step-by-step learning support in a simple format.</p>
+        </div>
+        <div class="pill-card">
+          <h3>Practical Skills</h3>
+          <p>Focus on skills students can use for freelancing and earning.</p>
+        </div>
+        <div class="pill-card">
+          <h3>Beginner Friendly</h3>
+          <p>Designed for students who are starting from zero.</p>
+        </div>
+        <div class="pill-card">
+          <h3>WhatsApp Support</h3>
+          <p>Quick help and contact via WhatsApp for updates and queries.</p>
+        </div>
+      </div>
+    </section>
+
+<!-- OFFER -->
+<div class="card offer-card" style="margin-top:14px; background:linear-gradient(135deg,#ff512f,#dd2476); color:white; position:relative; overflow:hidden;">
+  <div class="badge-float">BEST DEAL</div>
+  <div class="shimmer"></div>
+  <div style="margin-top:6px;">
+    <span class="savings-pill">ORIGINAL PRICE</span>
+  </div>
+
+  <div style="margin-top:8px; display:flex; justify-content:center; align-items:center; gap:10px;">
+    <span style="font-size:1.3rem; text-decoration:line-through; opacity:0.6;">₹899</span>
+    <span style="background:#00ffcc; color:#000; padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:800;">-45%</span>
+  </div>
+
+  <div style="font-size:3.2rem;font-weight:900; margin-top:6px;">₹499</div>
+  <div style="margin-top:10px; background:#fff; color:#dd2476; padding:8px; border-radius:10px; font-weight:900; display:inline-block;">USE CODE: WAITING</div>
+  <div style="margin-top:8px; font-size:0.85rem;">⏳ Limited Time Offer</div>
+</div>
+</div>
+
+<!-- PAY BUTTON -->
+<div class="card" style="margin-top:14px;">
+  <a class="btn btn-primary pay-primary" href="upi://pay?pa=9330395465@ybl&pn=WB Students Group&am=499&cu=INR">
+    <span class="pay-left">
+      <span class="pay-icon">🚀</span>
+      <span class="pay-label">Pay Now</span>
+    </span>
+    <span class="pay-right">
+      <span class="pay-price">₹499</span>
+      <span class="pay-sec">• Secure</span>
+    </span>
+  </a>
+</div>
+
+<!-- UPLOAD -->
+<div class="card" style="margin-top:14px;">
+  <a class="btn btn-secondary" href="https://wa.me/919330395465">📤 Upload Screenshot</a>
+</div>
+
+<!-- QR -->
+<div class="card" style="margin-top:14px;">
+  <h3>Scan & Pay</h3>
+  <img src="https://i.ibb.co/gLDmZjP8/qr-code.png" style="width:230px;border-radius:16px;box-shadow:0 10px 25px rgba(0,0,0,0.15);" />
+</div>
+
+<!-- FAQ -->
+<div class="card" style="margin-top:14px; text-align:left;">
+  <h3>FAQ</h3>
+  <p><strong>Payment kaise kare?</strong><br>Pay Now ya QR scan kare.</p>
+  <p><strong>Payment ke baad?</strong><br>Screenshot WhatsApp pe bheje.</p>
+</div>
+
+
+
+</section>
+
+              <strong>Scan QR</strong>
+              <span>Use your UPI app to scan the QR code.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div>
+              <strong>Pay ₹499</strong>
+              <span>Complete the payment for the discounted course fee.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div>
+              <strong>Save Screenshot</strong>
+              <span>Take a clear screenshot of the payment success page.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div>
+              <strong>Submit Proof</strong>
+              <span>Upload the screenshot using the form button below.</span>
+            </div>
+          </div>
+        </div>
+    </section>
+    <section class="section card">
+      <h2>FAQ</h2>
+      <div class="faq-grid">
+        <details>
+          <summary>How do I pay?</summary>
+          <p>Scan the QR code, pay ₹499, save the screenshot, and submit it using the form button.</p>
+        </details>
+        <details>
+          <summary>Is the offer limited?</summary>
+          <p>Yes. The page highlights limited seats and offer ending soon to create urgency.</p>
+        </details>
+        <details>
+          <summary>Can I contact the institute directly?</summary>
+          <p>Yes. Use the WhatsApp button or the number 9330395465.</p>
+        </details>
+        <details>
+          <summary>Can I replace the QR image later?</summary>
+          <p>Yes. Replace the placeholder block with your real QR code image before publishing.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="footer card">
+      <strong>WB Students Group</strong> • Skills To Earn<br />
+      WhatsApp: 9330395465<br />
+      <span>Thank you for choosing our course.</span>
+    </section>
+
+    <div class="sticky-mobile">
+      <a class="btn btn-primary pay-primary" href="upi://pay?pa=9330395465@ybl&pn=WB Students Group&am=499&cu=INR">
+        <span class="pay-left"><span class="pay-icon">🚀</span><span class="pay-label">Pay Now</span></span>
+        <span class="pay-right"><span class="pay-price">₹499</span></span>
+      </a>
+      <a class="btn btn-secondary" href="https://wa.me/919330395465" target="_blank" rel="noopener">Contact on WhatsApp</a>
+    </div>
+  </main>
+</main>
+
+<script>
+// Premium micro-interactions: reveal on scroll, button glow, and lightweight particles
+document.addEventListener('DOMContentLoaded', ()=>{
+  // mark hero for premium bg
+  const hero = document.querySelector('.hero'); if(hero) hero.classList.add('premium-bg');
+
+  // Intersection observer for reveal
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting) e.target.classList.add('in-view');
+    });
+  },{threshold:0.12});
+  document.querySelectorAll('.card, .pill-card, .step, .price-card').forEach(el=> io.observe(el));
+
+  // Button glow on hover + gentle pulse
+  document.querySelectorAll('.btn-primary').forEach(btn=>{
+    btn.addEventListener('mouseenter', ()=>{ btn.classList.add('glow'); });
+    btn.addEventListener('mouseleave', ()=>{ btn.classList.remove('glow'); });
+    // initial subtle pulse once
+    setTimeout(()=>{ btn.classList.add('pulse'); setTimeout(()=>btn.classList.remove('pulse'), 2800); }, 500);
+  });
+
+  // Lightweight particle canvas inside hero
+  if(hero){
+    const canvas = document.createElement('canvas');
+    canvas.style.position = 'absolute'; canvas.style.left = '0'; canvas.style.top = '0';
+    canvas.style.width = '100%'; canvas.style.height = '100%'; canvas.style.pointerEvents='none';
+    hero.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+    let DPR = Math.max(1, window.devicePixelRatio || 1);
+    function resize(){ canvas.width = Math.floor(hero.clientWidth * DPR); canvas.height = Math.floor(hero.clientHeight * DPR); canvas.style.width = hero.clientWidth+'px'; canvas.style.height = hero.clientHeight+'px'; }
+    resize(); window.addEventListener('resize', ()=>{ DPR = Math.max(1, window.devicePixelRatio || 1); resize(); });
+
+    const particles = [];
+    function spawn(){
+      const r = 6 + Math.random()*22;
+      particles.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx:(Math.random()-0.5)*0.2, vy:(Math.random()-0.3)*0.2, r, life: 300 + Math.random()*600, hue: 200 + Math.random()*60});
+      if(particles.length>35) particles.shift();
+    }
+    for(let i=0;i<18;i++) spawn();
+
+    let last = performance.now();
+    function tick(now){
+      const dt = now - last; last = now;
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      // spawn occasionally
+      if(Math.random()<0.14) spawn();
+      for(let i=particles.length-1;i>=0;i--){
+        const p = particles[i];
+        p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt;
+        const alpha = Math.max(0, Math.min(1, p.life/800));
+        const gr = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r*DPR);
+        gr.addColorStop(0, `hsla(${p.hue},90%,70%,${0.14*alpha})`);
+        gr.addColorStop(1, `hsla(${p.hue},70%,60%,0)`);
+        ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(p.x, p.y, p.r*DPR,0,Math.PI*2); ctx.fill();
+        if(p.life<=0) particles.splice(i,1);
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+});
+</script>
+
+<script>
+// Ripple touch effect for buttons (pointer friendly)
+function makeRipple(e){
+  const btn = e.currentTarget;
+  const rect = btn.getBoundingClientRect();
+  const d = Math.max(rect.width, rect.height);
+  const ripple = document.createElement('span');
+  ripple.className = 'ripple';
+  ripple.style.width = ripple.style.height = d + 'px';
+  ripple.style.left = (e.clientX - rect.left - d/2) + 'px';
+  ripple.style.top = (e.clientY - rect.top - d/2) + 'px';
+  btn.appendChild(ripple);
+  setTimeout(()=>{ ripple.remove(); }, 800);
+}
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.querySelectorAll('.btn').forEach(b=>{
+    b.addEventListener('pointerdown', makeRipple);
+  });
+});
+</script>
+
+<script>
+// Tap-to-zoom interactions for sections
+document.addEventListener('DOMContentLoaded', ()=>{
+  const sections = document.querySelectorAll('.section');
+  sections.forEach(sec=>{
+    let holdTimeout = null;
+    function add(){
+      sec.classList.add('tapped');
+    }
+    function remove(){
+      sec.classList.remove('tapped');
+      if(holdTimeout){ clearTimeout(holdTimeout); holdTimeout = null; }
+    }
+    sec.addEventListener('pointerdown', (ev)=>{
+      // small delay so accidental touches don't trigger too eagerly
+      holdTimeout = setTimeout(add, 60);
+    }, {passive:true});
+    ['pointerup','pointercancel','pointerleave'].forEach(evName=>{
+      sec.addEventListener(evName, ()=>{
+        // keep zoom for a short visible time then remove
+        if(holdTimeout){ clearTimeout(holdTimeout); holdTimeout = null; }
+        sec.classList.add('tapped');
+        setTimeout(remove, 260);
+      }, {passive:true});
+    });
+    // also support keyboard activation for accessibility
+    sec.setAttribute('tabindex', '0');
+    sec.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') { add(); setTimeout(remove, 260); } });
+  });
+});
+</script>
+
+</body>
+</html>
+
