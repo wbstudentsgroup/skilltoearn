@@ -818,23 +818,15 @@ slider.addEventListener('mouseup', startAutoScroll);
 </div>
 
 <!-- UPLOAD -->
+<!-- UPLOAD -->
 <div class="card" style="margin-top:14px;">
-  <button class="btn btn-secondary upload-btn" type="button">📤 Upload Screenshot</button>
-  <input id="screenshotInput" type="file" accept="image/*" capture="environment" style="display:none">
+  
+  <!-- BUTTON -->
+  <a href="https://form.svhrt.com/69d3cfab001e39939d9efcad" target="_blank" 
+     class="btn btn-secondary upload-btn">
+     📤 Upload Screenshot
+  </a>
 
-  <div id="uploadPreview" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:1400; align-items:center; justify-content:center;">
-    <div style="background:#fff; padding:12px; border-radius:12px; max-width:92%; max-height:86%; overflow:auto; text-align:center;">
-      <h3 style="margin:6px 0 8px;">Preview Screenshot</h3>
-      <img id="previewImg" src="" style="max-width:100%; max-height:60vh; display:block; margin:0 auto 8px; border-radius:8px;" />
-      <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
-        <button id="shareBtn" class="btn btn-primary" style="width:auto; padding:10px 14px;">Share</button>
-        <a id="openBtn" class="btn btn-secondary" style="width:auto; padding:10px 14px;">Open</a>
-        <a id="downloadBtn" class="btn btn-secondary" style="width:auto; padding:10px 14px;">Download</a>
-        <button id="closePreview" class="btn" style="width:auto; padding:10px 14px;">Close</button>
-      </div>
-      <div style="font-size:0.85rem; color:#666; margin-top:8px;">If your browser supports sharing, use Share for WhatsApp or other apps.</div>
-    </div>
-  </div>
 </div>
 
 <!-- QR -->
