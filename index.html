@@ -579,6 +579,16 @@
   .sticky-mobile .pay-primary{flex:1;min-width:0}
 }
 
+/* Disable heavy animations on small screens for smoothness */
+@media (max-width:720px){
+  .offer-card, .offer-card:hover, .offer-card.in-view{transform:none!important;box-shadow:none!important}
+  .offer-card .shimmer{display:none!important}
+  .pay-primary::after{display:none!important}
+  .btn-primary.pulse{animation:none!important}
+  .card{transition:none!important}
+  .section{transition:none!important}
+}
+
 /* Soft floating icons */
 .floating {position:absolute; pointer-events:none; opacity:0.14; filter: blur(6px);}
     
@@ -613,11 +623,6 @@ img{max-width:100%;height:auto;display:block;}
 }
 .sticky-mobile .btn{flex:1; width:auto;}
 @media(min-width:720px){ .sticky-mobile{display:none;} }
-
-/* Tap-to-zoom for sections (mobile-friendly) */
-.section{transition: transform 240ms cubic-bezier(.2,.9,.2,1), box-shadow 240ms ease; will-change: transform, box-shadow;}
-.section.tapped{transform: scale(1.035); box-shadow: 0 30px 70px rgba(16,45,120,0.12); z-index:60;}
-@media (prefers-reduced-motion: reduce){ .section{transition:none;} }
 
 /* Small screens adjustments */
 @media (max-width:720px){ .hero::before{display:none;} }
@@ -784,7 +789,7 @@ slider.addEventListener('mouseup', startAutoScroll);
     <span style="background:#00ffcc; color:#000; padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:800;">-45%</span>
   </div>
 
-  <div style="font-size:3.2rem;font-weight:900; margin-top:6px;"></div>
+  <div style="font-size:3.2rem;font-weight:900; margin-top:6px;">₹499</div>
   <div style="margin-top:10px; background:#fff; color:#dd2476; padding:8px; border-radius:10px; font-weight:900; display:inline-block;">USE CODE: WAITING</div>
   <div style="margin-top:8px; font-size:0.85rem;">⏳ Limited Time Offer</div>
 </div>
@@ -798,7 +803,7 @@ slider.addEventListener('mouseup', startAutoScroll);
       <span class="pay-label">Pay Now</span>
     </span>
     <span class="pay-right">
-      <span class="pay-price"></span>
+      <span class="pay-price">₹499</span>
       <span class="pay-sec">• Secure</span>
     </span>
   </a>
@@ -897,24 +902,28 @@ document.addEventListener('DOMContentLoaded', ()=>{
   // mark hero for premium bg
   const hero = document.querySelector('.hero'); if(hero) hero.classList.add('premium-bg');
 
-  // Intersection observer for reveal
+  // detect mobile / small screens and reduce heavy effects
+  const mobile = (typeof isMobile === 'function' && isMobile()) || window.innerWidth <= 720;
+
+  // Intersection observer for reveal (simpler on mobile)
   const io = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{
       if(e.isIntersecting) e.target.classList.add('in-view');
     });
-  },{threshold:0.12});
+  },{threshold: mobile ? 0.22 : 0.12});
   document.querySelectorAll('.card, .pill-card, .step, .price-card').forEach(el=> io.observe(el));
 
-  // Button glow on hover + gentle pulse
+  // Button glow on hover + gentle pulse (disable pulse on mobile)
   document.querySelectorAll('.btn-primary').forEach(btn=>{
     btn.addEventListener('mouseenter', ()=>{ btn.classList.add('glow'); });
     btn.addEventListener('mouseleave', ()=>{ btn.classList.remove('glow'); });
-    // initial subtle pulse once
-    setTimeout(()=>{ btn.classList.add('pulse'); setTimeout(()=>btn.classList.remove('pulse'), 2800); }, 500);
+    if(!mobile){
+      setTimeout(()=>{ btn.classList.add('pulse'); setTimeout(()=>btn.classList.remove('pulse'), 2800); }, 500);
+    }
   });
 
-  // Lightweight particle canvas inside hero
-  if(hero){
+  // Lightweight particle canvas inside hero (skip on mobile for performance)
+  if(hero && !mobile){
     const canvas = document.createElement('canvas');
     canvas.style.position = 'absolute'; canvas.style.left = '0'; canvas.style.top = '0';
     canvas.style.width = '100%'; canvas.style.height = '100%'; canvas.style.pointerEvents='none';
@@ -978,34 +987,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 <script>
 // Tap-to-zoom interactions for sections
-document.addEventListener('DOMContentLoaded', ()=>{
-  const sections = document.querySelectorAll('.section');
-  sections.forEach(sec=>{
-    let holdTimeout = null;
-    function add(){
-      sec.classList.add('tapped');
-    }
-    function remove(){
-      sec.classList.remove('tapped');
-      if(holdTimeout){ clearTimeout(holdTimeout); holdTimeout = null; }
-    }
-    sec.addEventListener('pointerdown', (ev)=>{
-      // small delay so accidental touches don't trigger too eagerly
-      holdTimeout = setTimeout(add, 60);
-    }, {passive:true});
-    ['pointerup','pointercancel','pointerleave'].forEach(evName=>{
-      sec.addEventListener(evName, ()=>{
-        // keep zoom for a short visible time then remove
-        if(holdTimeout){ clearTimeout(holdTimeout); holdTimeout = null; }
-        sec.classList.add('tapped');
-        setTimeout(remove, 260);
-      }, {passive:true});
-    });
-    // also support keyboard activation for accessibility
-    sec.setAttribute('tabindex', '0');
-    sec.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') { add(); setTimeout(remove, 260); } });
-  });
-});
+// Tap-to-zoom removed
 </script>
 
 </body>
