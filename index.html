@@ -515,6 +515,21 @@
   overflow: hidden;
 }
 
+/* Confetti celebration */
+.confetti{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:2500}
+.confetti-piece{position:absolute;width:6px;height:10px;border-radius:2px;opacity:0.95;will-change:transform,opacity}
+@keyframes confetti-fall{0%{transform:translateY(-5%) rotate(0);opacity:1}100%{transform:translateY(110%) rotate(360deg);opacity:0.95}}
+
+/* polished coupon controls */
+.coupon-input{padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);min-width:160px;font-weight:700;background:rgba(255,255,255,0.06);color:#fff}
+.coupon-input::placeholder{color:rgba(255,255,255,0.75)}
+.coupon-btn{padding:10px 14px;border-radius:12px;background:linear-gradient(90deg,#1862ff,#4f8cff);border:none;color:#fff;font-weight:800;box-shadow:0 8px 24px rgba(30,99,255,0.12)}
+.coupon-msg{margin-top:10px;font-weight:800;color:#fff;min-height:22px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.04);display:inline-block}
+
+/* subtle celebration glow */
+.celebrate{box-shadow:0 10px 40px rgba(30,99,255,0.18);transform:scale(1.06)}
+
+
 .hero::before{
   content: "";
   position: absolute;
@@ -643,7 +658,7 @@ window.addEventListener('load',()=>{document.body.style.opacity='1';});
 </script>
 <script>
 function startCountdown(){
-  const endDate=new Date("2026-04-08T00:00:00").getTime();
+  const endDate=new Date("2026-04-09T00:00:00").getTime();
   function update(){
     const now=new Date().getTime();
     const diff=endDate-now;
@@ -682,7 +697,88 @@ window.onload = function() {
   <h2 style="margin:0;">WB Students Group</h2>
   <p style="margin:5px 0 0; opacity:0.9;">Learn & Earn Skills</p>
 </div>
+  
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    const ORIGINAL = 899;
+    const DISCOUNTED = 499;
+    const CORRECT = 'WAITING';
 
+    const mainPrice = document.getElementById('mainPrice');
+    const origPrice = document.getElementById('origPrice');
+    const input = document.getElementById('couponInput');
+    const btn = document.getElementById('applyCouponBtn');
+    const msg = document.getElementById('couponMsg');
+    let applied = false;
+
+    if(mainPrice){
+      mainPrice.style.transition = 'transform 220ms ease, color 220ms ease, opacity 220ms ease';
+    }
+
+    function setMsg(text, ok){
+      if(!msg) return;
+      msg.textContent = text;
+      msg.style.color = ok ? '#d1fae5' : '#ffd7d7';
+    }
+
+    function animate(){
+      if(!mainPrice) return;
+      mainPrice.style.transform = 'scale(1.06)';
+      setTimeout(()=> mainPrice.style.transform = '', 400);
+    }
+
+    function apply(code){
+      const c = (code||'').trim().toUpperCase();
+      if(!c){ setMsg('',''); return; }
+      if(c === CORRECT){
+        if(applied){ setMsg('✅ Coupon already applied', true); return; }
+        applied = true;
+        // fade out price and run 2s celebration
+        if(mainPrice){ mainPrice.style.transition = 'transform 220ms ease, opacity 220ms ease'; mainPrice.style.transform = 'scale(0.85)'; mainPrice.style.opacity = '0'; }
+        triggerConfetti(2000);
+        setTimeout(()=>{
+          if(origPrice){ origPrice.style.textDecoration = 'line-through'; origPrice.style.opacity = '0.9'; }
+          if(mainPrice){ mainPrice.textContent = '₹' + DISCOUNTED; mainPrice.style.opacity = '1'; mainPrice.classList.add('celebrate');
+            setTimeout(()=> mainPrice.classList.remove('celebrate'), 900);
+          }
+          setMsg('✅ You save ₹' + (ORIGINAL - DISCOUNTED), true);
+        }, 2000);
+      } else {
+        setMsg('❌ Invalid Coupon', false);
+      }
+    }
+
+    function triggerConfetti(duration){
+      const container = document.getElementById('confetti');
+      if(!container) return;
+      const colours = ['#7dd3fc','#bfdbfe','#c7f9e9','#dbeafe','#fde68a','#e6fffa'];
+      const pieces = 16;
+      container.innerHTML = '';
+      for(let i=0;i<pieces;i++){
+        const el = document.createElement('div');
+        el.className = 'confetti-piece';
+        const left = Math.random()*100;
+        const size = 5 + Math.floor(Math.random()*8);
+        const bg = colours[Math.floor(Math.random()*colours.length)];
+        const dur = 1100 + Math.floor(Math.random()*700);
+        el.style.left = left + '%';
+        el.style.width = size + 'px';
+        el.style.height = Math.floor(size*1.6) + 'px';
+        el.style.background = bg;
+        el.style.transform = 'translateY(-20px) rotate(' + (Math.random()*360) + 'deg)';
+        el.style.animation = 'confetti-fall ' + dur + 'ms cubic-bezier(.2,.8,.2,1) forwards';
+        el.style.opacity = '0.98';
+        container.appendChild(el);
+      }
+      // remove after duration
+      setTimeout(()=>{ container.innerHTML = ''; }, duration + 300);
+    }
+
+    if(btn){ btn.addEventListener('click', ()=> apply(input ? input.value : '')); }
+    if(input){ input.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') apply(input.value); }); }
+
+  });
+</script>
 <!-- TIMER -->
 <div class="card" style="margin-top:14px; background:#fff5f5; border:1px solid #ffdada;">
   <h3 style="margin:0 0 8px; color:#ff3b3b;">⏳ Offer Ending Soon</h3>
@@ -785,7 +881,7 @@ slider.addEventListener('mouseup', startAutoScroll);
     </section>
 
 <!-- OFFER -->
-<div class="card offer-card" style="margin-top:14px; background:linear-gradient(135deg,#ff512f,#dd2476); color:white; position:relative; overflow:hidden;">
+<div class="card offer-card" style="margin-top:14px; background:linear-gradient(135deg,#0b74ff,#4f8cff); color:white; position:relative; overflow:hidden;">
   <div class="badge-float">BEST DEAL</div>
   <div class="shimmer"></div>
   <div style="margin-top:6px;">
@@ -793,14 +889,20 @@ slider.addEventListener('mouseup', startAutoScroll);
   </div>
 
   <div style="margin-top:8px; display:flex; justify-content:center; align-items:center; gap:10px;">
-    <span style="font-size:1.3rem; text-decoration:line-through; opacity:0.6;">₹899</span>
-    <span style="background:#00ffcc; color:#000; padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:800;">-45%</span>
+    <div id="origPrice" style="font-size:1.1rem; color:rgba(255,255,255,0.92);">MRP ₹899</div>
+    <span style="background:rgba(255,255,255,0.12); color:#fff; padding:6px 12px; border-radius:20px; font-size:0.78rem; font-weight:700;">BEST VALUE</span>
   </div>
 
-  <div style="font-size:3.2rem;font-weight:900; margin-top:6px;">₹499</div>
-  <div style="margin-top:10px; background:#fff; color:#dd2476; padding:8px; border-radius:10px; font-weight:900; display:inline-block;">USE CODE: WAITING</div>
-  <div style="margin-top:8px; font-size:0.85rem;">⏳ Limited Time Offer</div>
-</div>
+  <div style="font-size:3.2rem;font-weight:900; margin-top:6px; position:relative;">
+    <span id="mainPrice">₹899</span>
+    <div id="confetti" class="confetti" aria-hidden="true"></div>
+  </div>
+
+  <div style="margin-top:12px; display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap;">
+    <input id="couponInput" class="coupon-input" placeholder="Enter coupon code" />
+    <button id="applyCouponBtn" class="coupon-btn">Apply Coupon</button>
+  </div>
+  <div id="couponMsg" class="coupon-msg" aria-live="polite"></div>
 </div>
 
 <!-- PAY BUTTON -->
@@ -811,23 +913,21 @@ slider.addEventListener('mouseup', startAutoScroll);
       <span class="pay-label">Pay Now</span>
     </span>
     <span class="pay-right">
-      <span class="pay-price">₹499</span>
+      <span class="pay-price"></span>
       <span class="pay-sec">• Secure</span>
     </span>
   </a>
 </div>
 
-<!-- UPLOAD -->
-<!-- UPLOAD -->
-<div class="card" style="margin-top:14px;">
-  
-  <!-- BUTTON -->
-  <a href="https://form.svhrt.com/69d3cfab001e39939d9efcad" target="_blank" 
-     class="btn btn-secondary upload-btn">
-     📤 Upload Screenshot
-  </a>
+<button class="btn btn-secondary" onclick="openForm()">
+  📤 Upload Screenshot
+</button>
 
-</div>
+<script>
+function openForm(){
+  window.open("https://form.svhrt.com/69d3cfab001e39939d9efcad","_blank");
+}
+</script>
 
 <!-- QR -->
 <div class="card" style="margin-top:14px;">
@@ -878,7 +978,7 @@ slider.addEventListener('mouseup', startAutoScroll);
       <div class="faq-grid">
         <details>
           <summary>How do I pay?</summary>
-          <p>Scan the QR code, pay ₹499, save the screenshot, and submit it using the form button.</p>
+          <p>Scan the QR code, pay ₹899, save the screenshot, and submit it using the form button.</p>
         </details>
         <details>
           <summary>Is the offer limited?</summary>
@@ -909,6 +1009,7 @@ slider.addEventListener('mouseup', startAutoScroll);
       <a class="btn btn-secondary" href="https://wa.me/919330395465" target="_blank" rel="noopener">Contact</a>
     </div>
   </main>
+</main>
 
 <script>
 // Premium micro-interactions: reveal on scroll, button glow, and lightweight particles
